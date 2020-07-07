@@ -1,0 +1,265 @@
+﻿@using GamersAddict.Models
+@model GamersAddict.Models.ItemsToDoList
+@{
+    ViewBag.Title = "Rédaction";
+
+    //Load "To Do List" table
+    List<ItemsToDoList> ToDoList;
+    using (var context = new SiteDbContext())
+    {
+        ToDoList = context.ItemsToDoList.ToList();
+    }
+}
+
+@Html.Partial("Shared/_AdminPartial")
+<div class="page-content-body pure-g">
+    <div class="pure-u-md-24-24">
+        <div class="pure-g">
+            <h2 class="pure-u-md-12-24">Tableau des articles (To Do List)</h2>
+            <div class="pure-u-md-12-24" style="text-align: right; margin-top: 20px;">
+                <a id="addToDoArticle" href="#" class="pure-button pure-button-success">Ajout</a>
+                @Html.ActionLink("Rafraîchir", "Redaction", "Admin", null, new { @class = "pure-button pure-button-secondary" })
+            </div>
+        </div>
+        <hr />
+
+        <table id="listTable" class="pure-table" style="width: 100%; table-layout: fixed;">
+            <thead>
+                <tr>
+                    <th>Idées</th>
+                    <th>En cours</th>
+                    <th>Terminé !</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>
+                        <ul id="ToDoList1" class="droptrue">
+                            @{
+                                foreach (var item in ToDoList)
+                                {
+                                    if(item.State == 0)
+                                    {
+                                        <li id="@item.Id" class="portlet ui-state-default">
+                                            <div class="portlet-header">@item.Title</div>
+                                            <div class="portlet-content">@item.Description</div>
+                                            <div class="portlet-btn">
+                                                <a href="#" id="@item.Id" class="deleteBtn pure-button pure-button-error" style="color: white;">Supprimer</a>
+                                            </div>
+                                        </li>
+                                    }
+                                }
+                            }
+                        </ul>
+                    </td>
+
+                    <td>
+                        <ul id="ToDoList2" class="droptrue">
+                            @{
+                                foreach (var item in ToDoList)
+                                {
+                                    if (item.State == 1)
+                                    {
+                                        <li id="@item.Id" class="portlet ui-state-default">
+                                            <div class="portlet-header">@item.Title</div>
+                                            <div class="portlet-content">@item.Description</div>
+                                            <div class="portlet-btn">
+                                                <a href="#" id="@item.Id" class="deleteBtn pure-button pure-button-error" style="color: white;">Supprimer</a>
+                                            </div>
+                                        </li>
+                                    }
+                                }
+                            }
+                        </ul>
+                    </td>
+
+                    <td>
+                        <ul id="ToDoList3" class="droptrue">
+                            @{
+                                foreach (var item in ToDoList)
+                                {
+                                    if (item.State == 2)
+                                    {
+                                        <li id="@item.Id" class="portlet ui-state-default">
+                                            <div class="portlet-header">@item.Title</div>
+                                            <div class="portlet-content">@item.Description</div>
+                                            <div class="portlet-btn">
+                                                <a href="#" id="@item.Id" class="deleteBtn pure-button pure-button-error" style="color: white;">Supprimer</a>
+                                            </div>
+                                        </li>
+                                    }
+                                }
+                            }
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="pure-u-md-24-24">
+        <div class="pure-g">
+            <h2 class="pure-u-md-12-24">Liste des articles récents</h2>
+        </div>
+        <hr/>
+
+        @{ 
+            List<ArticlesViewModel> model = new List<ArticlesViewModel>();
+            using (var context = new SiteDbContext())
+            {
+                model = context.Articles
+                    .OrderByDescending(r => r.Id)
+                    .Select(r => new ArticlesViewModel
+                    {
+                        Id = r.Id,
+                        Title = r.Title,
+                    }).Take(3).ToList();
+            }
+        }
+
+        <div class="pure-g">
+            @foreach (var item in model)
+            {
+                <a style="padding: 4px; box-sizing: border-box;" class="pure-u-1 pure-u-md-8-24 gallery-box" href="~/Article/detail/@HttpUtility.UrlEncode(item.Title)">
+                    <img src="@Url.Content("~/Images/Uploads/Articles/Header/" +item.Id + "x1280.jpeg")" alt="@item.Title" class="pure-img">
+                    <div class="subheader" style="right: 4px; left: 4px;"><h3>@item.Title</h3></div>
+                </a>
+            }
+        </div>
+
+        <div style="width: 100%; text-align: center;">
+            @Html.ActionLink("En voir plus", "Articles", "Admin", null, new { @class = "pure-button" })
+        </div>
+    </div>
+
+</div>
+
+<div id="dialog-form" title="Ajout d'un projet à la liste (To Do List)">
+    @using (Html.BeginForm("Redaction", "Admin", null, FormMethod.Post, new { @class = "pure-form", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div>
+            @Html.LabelFor(m => m.Title)
+            @Html.TextBoxFor(m => m.Title, new { style = "width: 100%;" })
+        </div>
+
+        <div style="margin-top: 10px;">
+            @Html.LabelFor(m => m.Description)
+            @Html.TextAreaFor(m => m.Description, new { @class = "pure-input-1-2", style = " width: 100%;", placeholder = "Description de l'article" })
+        </div>
+
+        <div style="text-align: right; margin-top: 10px;">
+            <input type="submit" value="Ajout" class="pure-button pure-button-primary" />
+        </div>
+    }
+</div>
+
+@Scripts.Render("~/Scripts/jquery-ui-1.12.1.min.js")
+@section scripts {
+    <link rel="stylesheet" href="~/Content/x0popup/x0popup.min.css">
+    <script src="~/Content/x0popup/x0popup.min.js"></script>
+
+    <script>
+        $(function () {
+            //Dialog
+            dialog = $("#dialog-form").dialog({
+                autoOpen: false,
+                height: 400,
+                width: 450,
+                modal: true,
+                buttons: {
+                    "Annuler": function () {
+                        dialog.dialog("close");
+                    }
+                }
+            });
+
+            //Button
+            $("#addToDoArticle").on("click", function () {
+                dialog.dialog("open");
+            });
+
+            //To Do List Table
+            //-Drag & Drop
+            $("ul.droptrue").sortable({
+                connectWith: "ul"
+            });
+
+            $("ul.dropfalse").sortable({
+                connectWith: "ul",
+                dropOnEmpty: false
+            });
+
+            $(".portlet")
+              .addClass("ui-widget ui-widget-content ui-helper-clearfix ui-corner-all")
+              .find(".portlet-header")
+                .addClass("ui-widget-header ui-corner-all")
+                .prepend("<span class='ui-icon ui-icon-minusthick portlet-toggle'></span>");
+
+            $(".portlet-toggle").on("click", function () {
+                var icon = $(this);
+                icon.toggleClass("ui-icon-minusthick ui-icon-plusthick");
+                icon.closest(".portlet").find(".portlet-content").toggle();
+            });
+
+            $("#ToDoList1, #ToDoList2, #ToDoList3").disableSelection();
+
+            //-Drop event
+            $("#ToDoList1").droppable({
+                drop: function (ev, ui) {
+                    var id = $(ui.draggable).attr('id');
+                    $.ajax({
+                        url: "/Admin/RedactionToDoListAjaxUpdate?id=" + id + "&state=0"
+                    });
+                }
+            });
+
+            $("#ToDoList2").droppable({
+                drop: function (ev, ui) {
+                    var id = $(ui.draggable).attr('id');
+                    $.ajax({
+                        url: "/Admin/RedactionToDoListAjaxUpdate?id=" + id + "&state=1"
+                    });
+                }
+            });
+
+            $("#ToDoList3").droppable({
+                drop: function (ev, ui) {
+                    var id = $(ui.draggable).attr('id');
+                    $.ajax({
+                        url: "/Admin/RedactionToDoListAjaxUpdate?id=" + id + "&state=2"
+                    });
+                }
+            });
+
+            //-Delete
+            $('#listTable').on('click', '.deleteBtn', function () {
+                var userId = $(this).attr('id');
+
+                x0p({
+                    title: 'Suppression d\'un élément',
+                    type: 'warning',
+                    text: 'Une fois supprimer, vous ne pourrez pas le récupérer.',
+                    animationType: 'fadeIn',
+                    buttons: [
+                        {
+                            type: 'cancel',
+                            text: 'Annuler'
+                        },
+                        {
+                            type: 'warning',
+                            text: 'Supprimer'
+                        }
+                    ]
+                }).then(function (data) {
+                    if (data.button == 'warning') {
+                        document.location.href = "/Admin/RedactionToDoListDelete/" + userId;
+                    }
+                });
+            });
+        });
+    </script>
+}
+<link rel="stylesheet" href="~/Content/themes/base/jquery-ui.min.css">

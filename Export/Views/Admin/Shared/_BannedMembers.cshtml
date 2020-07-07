@@ -1,0 +1,81 @@
+﻿@using GamersAddict.Models
+@using Microsoft.AspNet.Identity.Owin;
+@{
+    List<MemberViewModel> model = new List<MemberViewModel>();
+    using (var context = new SiteDbContext())
+    {
+        //Get User Id list
+        var userIdList = context.AspNetUserBan
+            .Select(r => r.UserId).ToList();
+
+        var applicationDbContext = HttpContext.Current.GetOwinContext().Get<ApplicationDbContext>();
+        foreach (string userId in userIdList)
+        {
+            var query = applicationDbContext.Users
+                .Where(r => r.Id == userId)
+                .Select(r => new MemberViewModel()
+                {
+                    Id = r.Id,
+                    Name = r.UserName,
+                    Email = r.Email,
+                    LastLoginDate = r.LastLoginDate
+                }).FirstOrDefault();
+
+            model.Add(query);
+        }
+    }
+}
+
+<table id="listBanTable" style="width: 100%;" class="pure-table pure-table-horizontal">
+    <thead>
+        <tr>
+            <th>Nom de compte</th>
+            <th>Adresse Email</th>
+            <th>Dernière connexion</th>
+            <th>Débannir</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @{
+            foreach (var item in model)
+            {
+                <tr id="@("member" + @HttpUtility.UrlEncode(item.Id))">
+                    <td>@item.Name</td>
+                    <td>@item.Email</td>
+                    <td>@item.LastLoginDate</td>
+                    <td>
+                        <a href="#" id="@HttpUtility.UrlEncode(item.Id)" class="deleteBtn" style="color: red;">Déban</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<script>
+    $('#listBanTable').on('click', '.deleteBtn', function () {
+        var userId = $(this).attr('id');
+
+        x0p({
+            title: 'Débannir le compte',
+            type: 'warning',
+            text: 'L\'utilisareur pourra de nouveau accéder à son compte.',
+            animationType: 'fadeIn',
+            buttons: [
+                {
+                    type: 'cancel',
+                    text: 'Annuler'
+                },
+                {
+                    type: 'warning',
+                    text: 'Débannir le compte'
+                }
+            ]
+        }).then(function (data) {
+            if (data.button == 'warning') {
+                document.location.href = "/Admin/DebanUser?userId=" + userId;
+            }
+        });
+    });
+</script>

@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+  <url>
+    <loc>http://localhost:56864/</loc>
+  </url>
+  <url>
+    <loc>http://localhost:56864/home/video</loc>
+  </url>
+  <url>
+    <loc>http://localhost:56864/article</loc>
+  </url>
+  <url>
+    <loc>localhost/article/detail/mass+effect+1%2c+2+et+3+maintenant+sur+xbox+one+!</loc>
+    <lastmod>2016-11-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>localhost/article/detail/artice+nouveau+de+derni%c3%a8re+minute+!</loc>
+    <lastmod>2016-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>localhost/article/detail/article+original</loc>
+    <lastmod>2016-10-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>localhost/article/detail/skyrim+maintenant+dispo</loc>
+    <lastmod>0001-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>localhost/article/detail/article+titre</loc>
+    <lastmod>2016-10-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+</urlset>

@@ -1,0 +1,23 @@
+﻿@model GamersAddict.Models.ContactViewModel
+@{
+    ViewBag.Title = "Faire un don";
+}
+
+<div class="header">
+    <h1>Dons</h1>
+    <h2>Faites un don et aidez-nous à améliorer l'expérience Gamers Addict !</h2>
+</div>
+<div class="content">
+    <aside>
+        <p>Les dons permettent de faire avancer la chaîne en offrant un panel plus large de jeux a présenter et de pouvoir Upgrader le matériel ou Logiciel pour vous offrir une meilleure qualité, merci de votre attention. <strong>L'argent revient à Gamers Addict (YouTube).</strong></p>
+    </aside>
+            
+    <div style="text-align: center;">
+        <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+            <input type="hidden" name="cmd" value="_s-xclick">
+            <input type="hidden" name="hosted_button_id" value="J6YEWMX9GELXE">
+            <input type="image" src="https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal, le réflexe sécurité pour payer en ligne">
+            <img alt="" border="0" src="https://www.paypalobjects.com/fr_FR/i/scr/pixel.gif" width="1" height="1">
+        </form>
+    </div>
+</div>

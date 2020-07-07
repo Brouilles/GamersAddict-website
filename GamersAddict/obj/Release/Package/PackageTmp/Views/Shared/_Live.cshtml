@@ -1,0 +1,39 @@
+﻿@using GamersAddict.Models;
+@{ 
+    var modelConf = new Conf();
+    using (var context = new SiteDbContext())
+    {
+        modelConf = context.Conf.Find(1);
+    }
+}
+
+@if (modelConf.Value != "")
+{
+    <aside id="InLiveMenu">
+        <p>
+            <strong>En Live ! <a href="@("https://www.youtube.com/watch?v=" + modelConf.Value)">@modelConf.Name</a></strong>
+        </p>
+    </aside>
+
+    @Scripts.Render("~/Scripts/jquery.cookie-1.4.1.min.js")
+    @Scripts.Render("~/Scripts/push.min.js")
+
+    <script>
+        (function ($) {
+            if ($.cookie('@("live_" + modelConf.Value)') === undefined) {
+                $.cookie('@("live_" + modelConf.Value)', '1', { expires: 1 });
+
+                Push.create("Gamers Addict en live ! ", {
+                    body: "@modelConf.Name",
+                    timeout: 4000,
+                    onClick: function () {
+                        window.focus();
+                        window.open("@("https://www.youtube.com/watch?v=" + modelConf.Value)");
+                        this.close();
+                    }
+                });
+            }
+        })(jQuery);
+    </script>
+  
+}

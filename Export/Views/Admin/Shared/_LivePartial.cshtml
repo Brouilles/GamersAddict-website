@@ -1,0 +1,77 @@
+﻿@using GamersAddict.Models
+@model GamersAddict.Models.Conf
+@{
+    var modelConf = new Conf();
+    using (var context = new SiteDbContext())
+    {
+        modelConf = context.Conf.Find(1);
+    }
+
+    Conf model = new Conf();
+    model = modelConf;
+}
+
+@using (Ajax.BeginForm("InLive", "Admin", new AjaxOptions()
+{
+    OnSuccess = "AjaxSuccess",
+    OnFailure = "AjaxFailure"
+}, new { @class = "pure-form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    //Hide parameter
+    @Html.HiddenFor(m => model.Id)
+
+    //Form
+    <div>
+        @Html.TextBoxFor(m => model.Value, new { id = "LiveUrl", style = "width: 100%;", placeholder = "ID Youtube du live" })
+    </div>
+    <div style="margin-top: 10px;">
+        @Html.TextBoxFor(m => model.Name, new { id = "LiveName", style = "width: 100%;", placeholder = "Titre de la vidéo" })
+    </div>
+    <div style="margin-top: 6px;">
+        <div class="checkbox">
+            <input id="Checkbox" checked type="checkbox" name="preventEmail" value="true" />
+            <label for="preventEmail">Prévenir par email les personnes inscrites.</label>
+        </div>
+    </div>
+    <div style="text-align: right; margin-top: 6px;">
+        <input id="startLiveBtn" type="submit" @if(modelConf.Value == "") { <text> value="Début de live" </text> } else { <text> value="Fin du live" </text> } class="pure-button pure-button-primary" />
+    </div>
+}
+
+<link rel="stylesheet" href="~/Content/x0popup/x0popup.min.css">
+<script src="~/Content/x0popup/x0popup.min.js"></script>
+
+<script>
+    function AjaxSuccess() { location.reload(); }
+    function AjaxFailure() { x0p('Erreur', 'Erreur !', 'error', false); }
+
+    $('#startLiveBtn').click(function () {
+        $('#startLiveBtn').attr("disabled", true);
+    });
+
+    $(function () {
+        $('#LiveUrl').focus().keyup(function (event) {
+            search();
+        });
+
+        function search() {
+            $.getJSON("https://www.googleapis.com/youtube/v3/videos", {
+                key: "AIzaSyCyU3nRBSFLxJyRCm2fpK80DLl_j_esF7g",
+                part: "snippet,statistics",
+                id: $("#LiveUrl").val()
+        }, function (data) {
+            if (data.items.length === 0) {
+                    $('#LiveName').val("Erreur, mettre le titre manuellement.");
+                    return;
+                }
+
+                $('#LiveName').val(data.items[0].snippet.title);
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                $('#LiveName').val("Erreur, mettre le titre manuellement.");
+            });
+        }
+    });
+</script>

@@ -1,0 +1,95 @@
+﻿@model GamersAddict.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Inscription";
+}
+
+<div class="centered-box" style="width: 460px;">
+    <h2>Inscription sur Gamers Addict</h2>
+    <hr />
+
+    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "pure-form", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+        <div>
+            @Html.LabelFor(m => m.UserName)
+            @Html.TextBoxFor(m => m.UserName, new { style = "width: 100%;" })
+        </div>
+        <div style="margin-top: 10px;">
+            @Html.LabelFor(m => m.Email)
+            @Html.TextBoxFor(m => m.Email, new { style = "width: 100%;" })
+        </div>
+        <div style="margin-top: 10px;">
+            @Html.LabelFor(m => m.Password)
+            @Html.PasswordFor(m => m.Password, new { style = "width: 100%;" })
+        </div>
+        <div style="margin-top: 10px;">
+            @Html.LabelFor(m => m.ConfirmPassword)
+            @Html.PasswordFor(m => m.ConfirmPassword, new { style = "width: 100%;" })
+        </div>
+
+        <div class="pure-g" style="margin-top: 10px;">
+            <div class="pure-u-1 pure-u-md-12-24" for="MailSubscription" style="padding: 4px; box-sizing: border-box;">
+                @Html.CheckBoxFor(m => m.MailSubscription, new { @checked = "true" })
+                @Html.LabelFor(m => m.MailSubscription)
+            </div>
+
+            <div class="pure-u-1 pure-u-md-12-24" for="CharteAccepted" style="padding: 4px; box-sizing: border-box;">
+                @Html.CheckBoxFor(m => m.CharteAccepted)
+                @Html.LabelFor(m => m.CharteAccepted)
+            </div>
+        </div>
+
+        <div style="text-align: right; margin-top: 6px;">
+            <a id="charteModal" class="pure-button pure-button-secondary">Lire les conditions</a>
+            <input type="submit" class="pure-button pure-button-primary" value="Incription" />
+        </div>
+    }
+</div>
+
+<div id="dialog-form" title="Conditions d'utilisation">
+    <span>
+        Les administrateurs et modérateurs de ce site s'efforceront de supprimer ou éditer tous les messages à caractère répréhensible aussi rapidement que possible.
+        Toutefois, il leur est impossible de passer en revue la totalitée du contenu de ce site.
+        C'est pourquoi nous ne pouvons garantir ni l'exactitude, ni la perfection d'aucun message, et ne sommes responsables du contenu d'aucun message.<br>
+        <br>
+        N'importe quel utilisateur qui estime qu'un message envoyé est répréhensible est encouragé à nous contacter immédiatement par email affin que nous puissions le supprimer, si nous considérons que la suppression est nécesaire.<br>
+        <br>
+        En temps qu'utilisateur de nos services, vous vous engagez à ne pas utiliser ce site pour y placer du contenu qui serait faux ou diffamatoire, imprécis, abusif, vulgaire, incitant à la haine, coupables de harcèlement, obscènes, à caractère sexuel, menacants, dévoilant l'intimité d'une personne, ou d'une quelque manière que ce soit allant à l'encontre de n'importe quelle loi.<br>
+        <br>
+        En ce qui conserne vos informations personnelles, seul votre pseudo sera visible publiquement. Votre mot de passe sera crypté avant d'être enregistré dans notre base de données. Votre adresse email sert uniquement à vous restituer un nouveau mot de passe en cas de perte ou à vous avertir des informations vous consernant à propos de ce site. Nous nous engageons à ne transmettre votre adresse email à aucune tierce personne ou société sans votre accord.
+    </span>
+</div>
+
+@Scripts.Render("~/Scripts/jquery-ui-1.12.1.min.js")
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(function () {
+            //Dialog
+            dialog = $("#dialog-form").dialog({
+                autoOpen: false,
+                height: 500,
+                width: 550,
+                modal: true,
+                buttons: {
+                    "Annuler": function () {
+                        dialog.dialog("close");
+                    }
+                }
+            });
+
+            //Button
+            $("#charteModal").on("click", function () {
+                dialog.dialog("open");
+            });
+        });
+    </script>
+}
+
+<link rel="stylesheet" href="~/Content/themes/base/jquery-ui.min.css">
+<style>
+    body {
+        background: #eee;
+    }
+</style>

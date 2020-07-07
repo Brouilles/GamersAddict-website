@@ -1,0 +1,209 @@
+﻿@using GamersAddict.Models
+@using Microsoft.AspNet.Identity;
+@using Microsoft.AspNet.Identity.Owin;
+@model GamersAddict.Models.Articles
+@{
+    ViewBag.Title = Model.Title;
+
+    IList<Comments> commentsList;
+    List<string> commentsAuthorList = new List<string>();
+    using (var context = new SiteDbContext())
+    {
+        // Update View Counter
+        Model.Views++;
+        context.Entry(Model).State = System.Data.Entity.EntityState.Modified;
+
+        context.SaveChanges();
+
+        // Get Comments
+        commentsList = context.Comments
+                       .Where(r => r.ArticleId == Model.Id && r.CommentId == 0)
+                       .Select(r => r).OrderByDescending(r => r.Date).ToList();
+
+        // Get UserName
+        foreach(Comments comment in commentsList)
+        {
+            var applicationDbContext = HttpContext.Current.GetOwinContext().Get<ApplicationDbContext>();
+            var author = applicationDbContext.Users
+                       .Where(r => r.Id == comment.UserId)
+                       .Select(r => r.UserName).FirstOrDefault();
+
+            commentsAuthorList.Add(author);
+        }
+    }
+}
+
+<article itemscope itemtype="http://schema.org/Article">
+    <div class="header">
+        <h1 itemprop="name">@Model.Title</h1>
+        <h2 itemprop="description">@Model.Description</h2>
+    </div>
+    <div class="content">
+        <img itemprop="thumbnailUrl" src="@Url.Content("~/Images/Uploads/Articles/Header/" + Model.Id + "x800.jpeg")" alt="@Model.Title" class="pure-img" style="margin-top: 16px;" />
+        @if (User.IsInRole("administrator") || User.IsInRole("writer"))
+        {
+            <div style="width: 100%; text-align: right; margin-top: 6px;">
+                @Html.ActionLink("Modifier", "Post", "Admin", new { id = Model.Id }, new { @class = "pure-button pure-button-success" })
+            </div>
+        }
+
+        <div itemprop="text">
+            @Html.Raw(Model.Text)
+        </div>
+
+        <div style="clear: both;"></div>
+        <div class="header" style="padding: 0; margin: 6px 0;"></div>
+        <div style="width: 100%; text-align: center; margin-top: 6px;">
+            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- GamersAddict-responsive -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-5421936135764052"
+                 data-ad-slot="4787996527"
+                 data-ad-format="auto"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <div style="width: 100%;" class="pure-g">
+            @Html.Partial("Shared/_More")
+        </div>
+
+        <div class="header" style="padding: 0; margin: 6px 0;"></div>
+        <div>
+            <div>
+                <i style="float: left;">Par <span itemprop="author">@ViewBag.Author</span> Rédacteur <span property="publisher">Gamers Addict</span></i>
+                <div style="float: right; text-align: right;">
+                    <span itemprop="dateCreated" datetime="@Model.Date.ToString("yyyy-MM-dd HH':'mm':'ss")">
+                        @if (Model.EditDate != null)
+                        { @("Mis à jour le " + @Model.EditDate) }
+                        else
+                        { @Model.Date } 
+                    </span> <br />
+                    Vue(s) : @Model.Views
+                </div>
+            </div>
+            <div style="clear: both;"></div>
+
+            <div id="TagsList">
+                <strong>Tags :</strong>
+                <ul>
+                    @{
+                        string[] tags = Model.Tags.Split(',');
+                        foreach (string tag in tags)
+                        {
+                            <li>@Html.ActionLink(@tag, "Tag", "Article", new { id = HttpUtility.UrlEncode(tag) }, new { @class = "tag-button" })</li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <div class="header" style="padding: 0; margin: 6px 0;"></div>
+        <h2 id="postComment" class="pure-u-1 pure-u-md-24-24" style="margin-bottom: 6px;">Commentaires</h2>
+        @Html.Partial("Shared/_PostComment", new Comments { ArticleId = (int)Model.Id })
+
+        <div class="pure-u-1">
+            @{
+                int i = 0, j = 0;
+                foreach (Comments comment in commentsList)
+                {
+
+                    <div id="@("comment" + comment.Id)" class="comment-item comment-item-selected pure-g">
+                        <!--<div class="pure-u">
+                            <img width="40" height="40" class="comment-avatar" alt="@commentsAuthorList.ElementAt(i) avatar" src="http://purecss.io/img/common/reid-avatar.png">
+                        </div>-->
+                        <div class="pure-u-3-4">
+                            <h5 class="comment-name">@commentsAuthorList.ElementAt(i)</h5>
+                            <p class="comment-desc">
+                                @comment.Text
+                            </p>
+                        </div>
+                        <div class="pure-u-1" style="text-align: right;">
+                            @if (comment.UserId == User.Identity.GetUserId() || User.IsInRole("administrator") || User.IsInRole("writer") || User.IsInRole("moderator"))
+                            {
+                                <a href="#" id="@comment.Id" value="Supprimer" onclick="deleteComment(this)" class="delete pure-button pure-button-error">Supprimer</a>
+                            }
+
+                            <a href="#postComment" id="@comment.Id" value="Répondre" class="answer pure-button pure-button-secondary">Répondre</a>
+                        </div>
+                    </div>
+
+                    IList<Comments> subCommentsList;
+                    List<string> subCommentsAuthorList = new List<string>();
+                    using (var context = new SiteDbContext())
+                    {
+                        // Get Comments
+                        subCommentsList = context.Comments
+                                       .Where(r => r.ArticleId == Model.Id && r.CommentId == comment.Id)
+                                       .Select(r => r).OrderBy(r => r.Date).ToList();
+
+                        // Get UserName
+                        foreach (Comments subComment in subCommentsList)
+                        {
+                            var applicationDbContext = HttpContext.Current.GetOwinContext().Get<ApplicationDbContext>();
+                            var author = applicationDbContext.Users
+                                       .Where(r => r.Id == subComment.UserId)
+                                       .Select(r => r.UserName).FirstOrDefault();
+
+                            subCommentsAuthorList.Add(author);
+                        }
+                    }
+
+                    j = 0;
+                    foreach (Comments subComment in subCommentsList)
+                    {
+                        <div id="@("comment" + subComment.Id)" class="comment-item comment-item-selected comment-item-unread pure-g" style="margin-left: 64px;">
+                            <div class="pure-u-3-4">
+                                <h5 class="comment-name">@subCommentsAuthorList.ElementAt(j)</h5>
+                                <p class="comment-desc">
+                                    @subComment.Text
+                                </p>
+                            </div>
+
+                            @if (comment.UserId == User.Identity.GetUserId() || User.IsInRole("administrator") || User.IsInRole("writer") || User.IsInRole("moderator"))
+                            {
+                                <div class="pure-u-1" style="text-align: right;">
+                                    <a href="#" id="@comment.Id" onclick="deleteComment(this)" value="Supprimer" class="delete pure-button pure-button-error">Supprimer</a>
+
+                                </div>
+                            }
+                        </div>
+                        j++;
+                    }
+
+                    i++;
+                }
+            }
+        </div>
+    </div>
+</article>
+
+@section Scripts {
+    <script>
+        var actualId = 0;
+        $('.answer').click(function () {
+            $('#CommentId').val($('.answer').attr('id'));
+            $('#labelText').text("Répondre à un commentaire :");
+            $('#stopCommentary').show();
+        });
+
+        function deleteComment(e)
+        {
+            actualId = $(e).attr('id');
+
+            $.ajax({
+                data: { id: actualId },
+                url: '/Article/DeleteComment',
+                success: function (data) {
+                    x0p('Succès', 'Message supprimé !', 'ok', false);
+                    $("#comment" + actualId).hide();
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    x0p('Erreur', 'Suppression non effectuée !');
+                }
+            });
+        }
+    </script>
+}

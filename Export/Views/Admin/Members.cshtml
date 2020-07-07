@@ -1,0 +1,135 @@
+﻿@using Microsoft.AspNet.Identity
+@model IEnumerable<GamersAddict.Models.MemberViewModel>
+@{
+    ViewBag.Title = "Membres";
+}
+
+@Html.Partial("Shared/_AdminPartial")
+<div class="page-content-body pure-g">
+    <div class="pure-u-md-15-24">
+        <h2>Membres</h2>
+        <hr/>
+
+        <table id="listTable" class="pure-table pure-table-horizontal">
+            <thead>
+                <tr>
+                    <th>Nom de compte</th>
+                    <th>Adresse Email</th>
+                    <th>Date d'inscription</th>
+                    <th>Dernière connexion</th>
+                    <th>Rôle</th>
+                    <th>Bannir</th>
+                    <th>Supprimer</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            @{
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Email</td>
+                        <td>@item.RegistrationDate</td>
+                        <td>@item.LastLoginDate</td>
+                        <td><a href="#" id="@HttpUtility.UrlEncode(item.Id)" class="roleBtn">Modifier</a></td>
+                        <td><a href="@("/Admin/BanUser?userId=" + @HttpUtility.UrlEncode(item.Id))" style="color: orange;">Bannir</a></td>
+                        <td>@if (item.Name != User.Identity.GetUserName())
+                            { <a href="#" id="@HttpUtility.UrlEncode(item.Id)" class="deleteBtn" style="color: red;">Supprimer</a> }
+                            else
+                            { <text>Impossible</text> }
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pure-u-md-9-24">
+        <div style="padding: 0 6px;">
+            <h2>Gestion des droits</h2>
+            <hr />
+            @Html.Partial("Shared/_RankingMembers")
+        </div>
+
+        <div style="padding: 0 6px;">
+            <h2>Liste des bannis</h2>
+            <hr />
+            @Html.Partial("Shared/_BannedMembers")
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <link rel="stylesheet" href="~/Content/x0popup/x0popup.min.css">
+    <script src="~/Content/x0popup/x0popup.min.js"></script>
+
+    <script>
+        //Membres
+        $('#listTable').on('click', '.roleBtn', function () {
+            var userId = $(this).attr('id');
+
+            x0p({
+                title: 'Rôle',
+                text: ' Modifier le rang de l\'utilisateur',
+                icon: 'info',
+                animationType: 'fadeIn',
+                buttons: [
+                    {
+                        type: 'cancel',
+                        text : 'Annuler'
+                    },
+                    {
+                        type: 'ok',
+                        text: 'Admin'
+                    },
+                    {
+                        type: 'info',
+                        text: 'Rédacteur'
+                    },
+                    {
+                        type: 'warning',
+                        text: 'Modérateur'
+                    }
+                ]
+            }).then(function (data, text) {
+                if (data.button == 'ok') {
+                    document.location.href = "/Admin/ChangeUserRole?userId=" + userId + "&roleName=administrator";
+                }
+                else if (data.button == 'info') {
+                    document.location.href = "/Admin/ChangeUserRole?userId=" + userId + "&roleName=writer";
+                }
+                else if (data.button == 'warning') {
+                    document.location.href = "/Admin/ChangeUserRole?userId=" + userId + "&roleName=moderator";
+                }
+            });
+        });
+
+        $('#listTable').on('click', '.deleteBtn', function () {
+            var userId = $(this).attr('id');
+
+            x0p({
+                title: 'Suppression de compte',
+                type: 'warning',
+                text: 'Une fois supprimer, vous ne pourrez pas le récupérer.',
+                animationType: 'fadeIn',
+                buttons: [
+                    {
+                        type: 'cancel',
+                        text: 'Annuler'
+                    },
+                    {
+                        type: 'warning',
+                        text: 'Supprimer le compte'
+                    }
+                ]
+            }).then(function (data) {
+                if (data.button == 'warning') {
+                    document.location.href = "/Admin/DeleteUser?id=" + userId;
+                }
+            });
+        });
+    </script>
+}

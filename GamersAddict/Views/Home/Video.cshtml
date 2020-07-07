@@ -1,0 +1,145 @@
+﻿@{
+    ViewBag.Title = "Vidéos & rediff";
+}
+
+<div>
+    <section id="videoHeader" class="pure-g" style="display: none;">
+        <a id="bigVideoJS" class="pure-u-1 pure-u-xl-16-24 gallery-box" href="#">
+            <img src="" alt="Gamers Addict" class="pure-img" />
+            <div class="subheader"></div>
+        </a>
+        
+        <div class="pure-u-1 pure-u-xl-8-24">
+            <a id="rightVideo2JS" class="pure-u-1 gallery-box" href="#">
+                <img src="" alt="Gamers Addict" class="pure-img" />
+                <div class="subheader"></div>
+            </a>
+            
+            <a id="rightVideo3JS" class="pure-u-1 gallery-box" href="#">
+                <img src="" alt="Gamers Addict" class="pure-img" />
+                <div class="subheader"></div>
+            </a>
+        </div>
+    </section>
+    <section id="videoLoading">
+        <div class="uil-triangle-css" style="margin: auto;"><div><div></div></div><div><div></div></div><div><div></div></div></div>
+    </section>
+
+
+    <div class="page-content-body">
+        <section>
+            <h2>La Cave a BuBu - Tous Les Jeux Rétro De La Chaîne</h2>
+            <section id="retroVideoList" class="pure-g"></section>
+            <div style="text-align: center; width: 100%;">
+                <a class="pure-button pure-button-primary" href="https://www.youtube.com/playlist?list=PLT_nmWXp6QmOSrKeVWgAo1oR-pKf1Ugc0">En voir plus</a>
+            </div>
+        </section>
+        <div style="clear: both;"></div>
+
+        <div style="width: 100%; text-align: center; margin-top: 16px;">
+            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- GamersAddict-responsive -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-5421936135764052"
+                 data-ad-slot="4787996527"
+                 data-ad-format="auto"></ins>
+            <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <section>
+            <h2>Xbox One</h2>
+            <section id="xboxVideoList" class="pure-g">
+
+            </section>
+            <div style="text-align: center; width: 100%;"> 
+                <a class="pure-button pure-button-primary" href="https://www.youtube.com/playlist?list=PLT_nmWXp6QmNnmos7ACB17mhIa4tOCOYC">En voir plus</a>
+            </div>
+        </section>
+        <div style="clear: both;"></div>
+
+        <section class="pure-u-1">
+            <h2 class="pure-u-1">Playstation 4 Pro & Playstation 4</h2>
+            <section id="playstationVideoList" class="pure-g"></section>
+            <div style="text-align: center; width: 100%;">
+                <a class="pure-button pure-button-primary" href="https://www.youtube.com/playlist?list=PLT_nmWXp6QmOBcLozy3TLAB35YJMPxclB">En voir plus</a>
+            </div>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        //Load content
+        loadVideoList("header", "PLT_nmWXp6QmO2sWhvdquMvI5Mq0wR9MPa", 3); //Default
+        loadVideoList("default", "PLT_nmWXp6QmOSrKeVWgAo1oR-pKf1Ugc0", 4, "#retroVideoList");
+        loadVideoList("default", "PLT_nmWXp6QmNnmos7ACB17mhIa4tOCOYC", 8, "#xboxVideoList");
+        loadVideoList("default", "PLT_nmWXp6QmOBcLozy3TLAB35YJMPxclB", 8, "#playstationVideoList");
+
+        function loadVideoList(type, in_playlistId, nb, div) {
+            $.get(
+                "https://www.googleapis.com/youtube/v3/channels", {
+                    part: 'contentDetails',
+                    forUsername: 'BUROS1ST',
+                    key: 'AIzaSyCyU3nRBSFLxJyRCm2fpK80DLl_j_esF7g'
+                },
+                function (data) {
+                    $.each(data.items, function (i, item) {
+                        var playlistId = in_playlistId
+                        getVideos(type, in_playlistId, nb, div);
+                    })
+                }
+            );
+        }
+
+        function getVideos(type, plid, nb, div) {
+            $.get(
+                "https://www.googleapis.com/youtube/v3/playlistItems", {
+                    part: 'snippet',
+                    maxResults: nb,
+                    playlistId: plid,
+                    key: 'AIzaSyCyU3nRBSFLxJyRCm2fpK80DLl_j_esF7g'
+                },
+
+                function (data) {
+                    var output, videoNb = 0;
+
+                    if (type === "header") {
+                        youtubeData = data;
+
+                        $.each(data.items, function (i, item) {
+                            videoNb++;
+
+                            if (videoNb === 1) {
+                                $("#bigVideoJS").attr("href", "/Video/Player/" + item.snippet.resourceId.videoId);
+                                $("#bigVideoJS img").attr("src", "https://i.ytimg.com/vi/" + item.snippet.resourceId.videoId + "/maxresdefault.jpg");
+                                $("#bigVideoJS img").attr("alt", item.snippet.title);
+                                $("#bigVideoJS .subheader").append('<h2>' + item.snippet.title + '</h2>');
+                            } else {
+                                $("#rightVideo" + videoNb.toString() + "JS").attr("href", "/Video/Player/" + item.snippet.resourceId.videoId);
+                                $("#rightVideo" + videoNb.toString() + "JS img").attr("src", "https://i.ytimg.com/vi/" + item.snippet.resourceId.videoId + "/maxresdefault.jpg");
+                                $("#rightVideo" + videoNb.toString() + "JS img").attr("alt", item.snippet.title);
+                                $("#rightVideo" + videoNb.toString() + "JS .subheader").append('<h2>' + item.snippet.title + '</h2>');
+                            }
+                        })
+
+                        $('#videoHeader').show();
+                        $('#videoLoading').hide();
+                    }
+                    else if (type === "default") {
+                        youtubeXboxData = data;
+                        $.each(data.items, function (i, item) {
+                            videoNb++;
+
+                            output = ' <a href="/Video/Player/' + item.snippet.resourceId.videoId + '" class="pure-u-1 pure-u-xl-6-24 pure-u-md-12-24 goVideoPage" style="box-sizing: border-box; cursor: pointer; padding: 0px 2px 4px 2px;"><img style="width: 100%; height: 100%;" src="https://i.ytimg.com/vi/' + item.snippet.resourceId.videoId + '/mqdefault.jpg" /></a>';
+                            $(div).append(output);
+                        })
+                    }
+                }
+            );
+        }
+    </script>
+}
+<link rel="stylesheet" href="~/Content/loadingZelda.min.css">

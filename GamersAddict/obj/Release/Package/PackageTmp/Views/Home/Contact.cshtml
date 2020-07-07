@@ -1,0 +1,61 @@
+﻿@model GamersAddict.Models.ContactViewModel
+@{
+    ViewBag.Title = "Contact";
+}
+
+<div class="header">
+    <h1>Nous contacter</h1>
+    <h2>Une question ? Un problème ? Vous êtes au bon endroit !</h2>
+</div>
+<div class="content" id="contact">
+
+    <div id="ContactForm">
+        <aside>
+            <p>Le formulaire suivant concerne le site internet, application et service autre que la chaîne Youtube en elle-même. Pour prendre contact avec celle-ci rendez-vous sur <a href="https://www.youtube.com/user/BUROS1ST/about">cette page</a>.</p>
+        </aside>
+            
+        @using (Ajax.BeginForm("AjaxContact", "Home", new AjaxOptions()
+        {
+            OnSuccess = "AjaxSuccess",
+            OnFailure = "AjaxFailure"
+        }, new { @class = "pure-form pure-form-aligned" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            <fieldset>
+                <div class="pure-control-group">
+                    @Html.LabelFor(m => m.Pseudo)
+                    @Html.TextBoxFor(m => m.Pseudo)
+                </div>
+
+                <div class="pure-control-group">
+                    @Html.LabelFor(m => m.Email)
+                    @Html.TextBoxFor(m => m.Email)
+                </div>
+
+                <div class="pure-control-group">
+                    @Html.LabelFor(m => m.Title)
+                    @Html.TextBoxFor(m => m.Title)
+                </div>
+
+                <div class="pure-control-group">
+                    @Html.LabelFor(m => m.Text)
+                    @Html.TextAreaFor(m => m.Text, new { rows = "8" })
+                </div>
+
+                <div class="pure-controls">
+                    <button type="submit" class="pure-button pure-button-primary">Envoyer</button>
+                </div>
+            </fieldset>
+        }
+    </div>
+
+    <link rel="stylesheet" href="~/Content/x0popup/x0popup.min.css">
+    <script src="~/Content/x0popup/x0popup.min.js"></script>
+
+    <script>
+        function AjaxSuccess() { x0p('Succès', 'Message envoyé !', 'ok', false); }
+        function AjaxFailure() { x0p('Erreur', 'Envoie non effectuée !', 'error', false); }
+    </script>
+</div>

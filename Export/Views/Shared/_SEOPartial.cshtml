@@ -1,0 +1,15 @@
+﻿@using GamersAddict.Models
+@{
+    Conf[] model = new Conf[2];
+    using (var context = new SiteDbContext())
+    {
+        Conf descriptionModel = context.Conf.Find(2); //Description
+        Conf keyWordModel = context.Conf.Find(3); //KeyWord
+
+        model[0] = descriptionModel;
+        model[1] = keyWordModel;
+    }
+}
+
+<meta name="description" content="@(model[0].Value)">
+<meta name="keywords" content="@( model[1].Value)">

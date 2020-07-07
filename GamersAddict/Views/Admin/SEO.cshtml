@@ -1,0 +1,110 @@
+﻿@using GamersAddict.Models
+@{
+    ViewBag.Title = "SEO";
+}
+
+@Html.Partial("Shared/_AdminPartial")
+<div class="page-content-body pure-g">
+    <div class="pure-u-1" style="text-align: right;">
+        @using (Ajax.BeginForm("UpdateSitemapXML", "Admin", new AjaxOptions()
+        {
+            OnSuccess = "AjaxSuccess",
+            OnFailure = "AjaxFailure"
+        }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <button type="submit" class="pure-button pure-button-secondary">Mettre à jour la sitemap XML</button>
+        }
+    </div>
+
+    <div class="pure-u-md-12-24">
+        <ul>
+            <li>Ne dépassez pas 160 – 165 caractères, espace compris, pour être sûr que la description s’affiche entièrement dans la page de résultat des moteurs de recherche (pas tronquée).</li>
+            <li>Faites en sorte d’utiliser des phrases avec des verbes afin que la description ait un sens et pour éviter de passer pour du spam.</li>
+            <li>La description ne doit pas être destinée exclusivement aux moteurs de recherche mais également aux internautes qui viendront sur votre site seulement si la description les séduit et parle de ce qu’ils recherchent.</li>
+            <li><strong>Maximum 10 mots-clefs.</strong></li>
+        </ul>
+
+        @{
+            Conf Model = new Conf();
+            using (var context = new SiteDbContext())
+            {
+                Model = context.Conf.Where(r => r.Id == 2).FirstOrDefault();
+            }
+        }
+        @using (Ajax.BeginForm("UpdateConf", "Admin", new AjaxOptions()
+        {
+            OnSuccess = "AjaxSuccess",
+            OnFailure = "AjaxFailure"
+        }, new { @class = "pure-form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            @Html.HiddenFor(m => Model.Id);
+            @Html.HiddenFor(m => Model.Name);
+
+            <div class="pure-u-1 pure-u-md-24-24">
+                @Html.TextAreaFor(m => Model.Value, new { rows = "5", @class = "pure-input-1" })
+            </div>
+
+            <div class="pure-u-1 pure-u-md-24-24" style="text-align: right; margin-top: 6px;">
+                <button type="submit" class="pure-button pure-button-primary">Mettre à jour</button>
+            </div>
+        }
+    </div>
+
+    <div class="pure-u-md-12-24">
+        <ul>
+            <li>Vos mots clés doivent être séparés par des virgules.</li>
+            <li>Vous pouvez alterner des mots clés de langue française et anglaise.</li>
+            <li>Sur les mots clés importants de votre site vous pouvez les inscrire en majuscules et minuscules.</li>
+            <li>Jouez sur les synonymes. </li>
+            <li><strong>Maximum 10 mots-clefs.</strong></li>
+        </ul>
+
+        @{
+            using (var context = new SiteDbContext())
+            {
+                Model = context.Conf.Where(r => r.Id == 3).FirstOrDefault();
+            }
+        }
+        @using (Ajax.BeginForm("UpdateConf", "Admin", new AjaxOptions()
+        {
+            OnSuccess = "AjaxSuccess",
+            OnFailure = "AjaxFailure"
+        }, new { @class = "pure-form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            @Html.HiddenFor(r => Model.Id);
+            @Html.HiddenFor(r => Model.Name);
+
+            <div class="pure-u-1 pure-u-md-24-24">
+                @Html.TextBoxFor(r => Model.Value, new { @class = "pure-input-1" })
+            </div>
+
+            <div class="pure-u-1 pure-u-md-24-24" style="text-align: right; margin-top: 6px;">
+                <button type="submit" class="pure-button pure-button-primary">Mettre à jour</button>
+            </div>
+        }
+    </div>
+</div>
+
+@section scripts
+{
+    <link rel="stylesheet" href="~/Content/x0popup/x0popup.min.css">
+    <script src="~/Content/x0popup/x0popup.min.js"></script>
+
+    <script>
+        function AjaxSuccess() {
+            x0p('Succès', 'Modification effectuée avec succès !', 'ok', false);
+        }
+
+        function AjaxFailure() {
+            x0p('Erreur', 'Modification non effectuée !', 'error', false);
+        }
+    </script>
+}

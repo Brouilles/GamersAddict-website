@@ -1,0 +1,77 @@
+﻿@using GamersAddict.Models
+@using Microsoft.AspNet.Identity.Owin;
+@{
+    var applicationDbContext = HttpContext.Current.GetOwinContext().Get<ApplicationDbContext>();
+    var model = (from u in applicationDbContext.Users
+        from ur in u.Roles
+        join r in applicationDbContext.Roles on ur.RoleId equals r.Id
+        select new MemberRoleViewModel()
+        {
+            Id = u.Id,
+            Name = u.UserName,
+            Role = r.Name
+        }).ToList();
+}
+
+<table id="listRankTable" style="width: 100%;" class="pure-table pure-table-horizontal">
+    <thead>
+        <tr>
+            <th>Nom de compte</th>
+            <th>Rôle</th>
+            <th>Supprimer</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @{
+            foreach (var item in model)
+            {
+                <tr id="@("member" + @HttpUtility.UrlEncode(item.Id))">
+                    <td>@item.Name</td>
+                    <td>@item.Role</td>
+                    <td>
+                        <a href="#" id="@HttpUtility.UrlEncode(item.Id)" class="deleteBtn" style="color: red;">Supprimer</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<script>
+    $('#listRankTable').on('click', '.deleteBtn', function () {
+        var userId = $(this).attr('id');
+
+        x0p({
+            title: 'Suppression du rôle',
+            type: 'warning',
+            text: 'Voulez-vous vraiment supprimer le rôle de l\'utilisateur ?',
+            animationType: 'fadeIn',
+            buttons: [
+                {
+                    type: 'cancel',
+                    text: 'Annuler'
+                },
+                {
+                    type: 'warning',
+                    text: 'Supprimer',
+                    showLoading: true
+                }
+            ]
+        }).then(function (data) {
+            if (data.button == 'warning') {
+                $.ajax({
+                    type: "POST",
+                    url: "DeleteUserRole?id=" + userId,
+                    data: "{}",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (msg) {
+                        $("#listRankTable #member" + userId).hide();
+                        x0p('Effectué', null, 'ok', false);
+                    }
+                });
+            }
+        });
+    });
+</script>

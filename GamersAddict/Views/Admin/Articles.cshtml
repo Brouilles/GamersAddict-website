@@ -1,0 +1,92 @@
+﻿@model IEnumerable<GamersAddict.Models.ArticlesViewModel>
+@{
+    ViewBag.Title = "Articles";
+}
+
+@Html.Partial("Shared/_AdminPartial")
+<div class="page-content-body pure-g">
+    <div class="pure-u-md-24-24">
+        <div class="pure-g">
+            <h2 class="pure-u-md-12-24">Liste des articles</h2>
+            <div class="pure-u-md-12-24" style="text-align: right; margin-top: 20px;">
+                @Html.ActionLink("Ajout d'un article", "Post", "Admin", null, new { @class = "pure-button pure-button-success" })
+            </div>
+        </div>
+        <hr />
+        <div style="width: 100%; margin-bottom: 10px;">
+            <form method="get" id="logoutSearch" class="pure-form">
+                <input type="text" id="searchInput" name="searchTerm" class="form-control" style="min-width: 100%;" value="@ViewBag.searchTerm" placeholder="Que cherchez-vous ?">
+            </form>
+        </div>
+
+        <table id="listTable" class="pure-table pure-table-bordered" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Titre</th>
+                    <th>Date de publication</th>
+                    <th>Vues</th>
+                    <th>Voir</th>
+                    <th>Modifier</th>
+                    <th>Supprimer</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Title</td>
+                        <td>@item.Date</td>
+                        <td>@item.Views</td>
+                        <td><a href="~/Article/detail/@HttpUtility.UrlEncode(item.Title)">Voir</a></td>
+                        <td>@Html.ActionLink("Modifier", "Post", "Admin", new { id = item.Id }, null)</td>
+                        <td><a href="#" id="@item.Id" class="deleteBtn" style="color: red;">Supprimer</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section scripts
+{
+    <link rel="stylesheet" href="~/Content/x0popup/x0popup.min.css">
+    <script src="~/Content/x0popup/x0popup.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            document.getElementById('searchInput').onkeydown = function (e) {
+                if (e.keyCode == 13) {
+                    document.getElementById('logoutSearch').submit()
+                }
+            };
+        });
+
+        $('#listTable').on('click', '.deleteBtn', function () {
+            var userId = $(this).attr('id');
+
+            x0p({
+                title: 'Suppression d\'un article',
+                type: 'warning',
+                text: 'Une fois supprimer, vous ne pourrez pas le récupérer.',
+                animationType: 'fadeIn',
+                buttons: [
+                    {
+                        type: 'cancel',
+                        text: 'Annuler'
+                    },
+                    {
+                        type: 'warning',
+                        text: 'Supprimer le partenaire'
+                    }
+                ]
+            }).then(function (data) {
+                if (data.button == 'warning') {
+                    document.location.href = "/Admin/DeletePost/" + userId;
+                }
+            });
+        });
+    </script>
+}

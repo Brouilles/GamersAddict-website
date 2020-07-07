@@ -1,0 +1,142 @@
+﻿@using GamersAddict.Models
+@model IEnumerable<GamersAddict.Models.ArticlesViewModel>
+@{
+    // Pages
+    int lessPage = ViewBag.Page - 1;
+    int currentPage = ViewBag.Page;
+    int addPage = ViewBag.Page + 1;
+    int addMorePage = ViewBag.Page + 2;
+
+    int pageNumber;
+
+    // Get article
+    List <ArticlesViewModel> HeaderModel;
+    using (var context = new SiteDbContext())
+    {
+        HeaderModel = context.Articles
+            .OrderByDescending(r => r.Date)
+            .Where(r => r.PublishState == 2)
+            .Take(3)
+            .Select(r => new ArticlesViewModel
+            {
+                Id = r.Id,
+                Title = r.Title,
+                Description = r.Description,
+                Date = r.Date,
+                Views = r.Views,
+                PublishState = r.PublishState
+            }).ToList();
+
+        pageNumber = context.Articles.Count() / 6;
+    }
+
+    ViewBag.Title = "Liste des articles";
+}
+
+<div id="HomeArticle">
+    <section class="pure-g">
+        <a id="bigVideoJS" class="pure-u-1 pure-u-xl-16-24 gallery-box" href="~/Article/detail/@HttpUtility.UrlEncode(HeaderModel[0].Title)">
+            <img src="@Url.Content("~/Images/Uploads/Articles/Header/" + HeaderModel[0].Id + "x1280.jpeg")" alt="@HeaderModel[0].Title" class="pure-img">
+            <div class="subheader"><h2>@HeaderModel[0].Title</h2></div>
+        </a>
+
+        <div class="pure-u-1 pure-u-xl-8-24">
+            <a id="rightVideo2JS" class="pure-u-1 gallery-box" href="~/Article/detail/@HttpUtility.UrlEncode(HeaderModel[1].Title)">
+                <img src="@Url.Content("~/Images/Uploads/Articles/Header/" + HeaderModel[1].Id + "x1280.jpeg")" alt="@HeaderModel[1].Title" class="pure-img">
+                <div class="subheader"><h2>@HeaderModel[1].Title</h2></div>
+            </a>
+
+            <a id="rightVideo3JS" class="pure-u-1 gallery-box" href="~/Article/detail/@HttpUtility.UrlEncode(HeaderModel[2].Title)">
+                <img src="@Url.Content("~/Images/Uploads/Articles/Header/" + HeaderModel[2].Id + "x1280.jpeg")" alt="@HeaderModel[2].Title" class="pure-img">
+                <div class="subheader"><h2>@HeaderModel[2].Title</h2></div>
+            </a>
+        </div>
+    </section>
+
+    <div class="page-content-body pure-g">
+        <div class="pure-u-1 mobile-only">
+            <form class="pure-form" action="/Article/Search" method="get" id="logoutSearch" style="width: 100%; padding: 16px 0;">
+                <input type="text" id="searchInput" placeholder="Votre recherche" name="page" class="pure-input-rounded" style="width: calc(100%);">
+            </form>
+        </div>
+
+        <div class="pure-u-1 pure-u-xl-18-24">
+            @foreach (var article in Model)
+            {
+                <div class="postBox pure-g">
+                    <div class="img pure-u-1 pure-u-xl-8-24 pure-u-lg-24-24">
+                        <a href="~/Article/detail/@HttpUtility.UrlEncode(article.Title)">
+                            <img src="@Url.Content("~/Images/Uploads/Articles/Header/" + article.Id + "x800.jpeg")" alt="@article.Title" class="pure-img">
+                        </a>
+                    </div>
+
+                    <div class="postItem pure-u-1 pure-u-xl-16-24 pure-u-lg-24-24">
+                        <div class="header">
+                            <h2>@article.Title</h2>
+                        </div>
+
+                        <div class="content" style="padding-left: 0;">
+                            <p>@article.Description</p>
+                            <p>Date de sortie : @article.Date</p>
+                            <div class="rightBtn">
+                                <a href="~/Article/detail/@HttpUtility.UrlEncode(article.Title)" class="pure-button pure-button-primary">Lire l'article</a>
+                            </div>
+                        </div>
+                        <div style="clear: both;"></div>
+                    </div>
+                </div>
+            }
+
+            <div style="text-align: center; margin-top: 16px;">
+                @if (ViewBag.Page > 0)
+                {
+                    @Html.ActionLink("Avant", "Index", "Article", new { page = lessPage.ToString() }, new { @class = "pure-button", style = "margin-right: 4px;" })
+                    @Html.ActionLink(currentPage.ToString(), "Index", "Article", new { page = lessPage.ToString() }, new { @class = "pure-button" })
+                }
+
+                @Html.ActionLink(addPage.ToString(), "Index", "Article", new { page = currentPage.ToString() }, new { @class = "pure-button pure-button-primary" })
+
+                @if (pageNumber > 1 && currentPage < pageNumber)
+                {
+                    @Html.ActionLink(addMorePage.ToString(), "Index", "Article", new { page = addPage.ToString() }, new { @class = "pure-button" })
+                    @Html.ActionLink("Après", "Index", "Article", new { page = addPage.ToString() }, new { @class = "pure-button", style = "margin-left: 4px;" })
+                }
+            </div>
+        </div>
+
+        <div class="pure-u-1 pure-u-xl-6-24">
+            <form class="pure-form desktop-only" action="/Article/Search" method="get" id="logoutSearch" style="width: 100%;">
+                <input type="text" id="searchInput" placeholder="Votre recherche" name="page" class="pure-input-rounded" style="width: calc(100% - 120px);">
+                <button type="submit" class="pure-button">Recherche</button>
+            </form>
+
+            <h3>Tags récents :</h3>
+            @Html.Partial("Shared/_Tags")
+
+            <div style="text-align: center; width: 100%;">
+                <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                <!-- GamersAddict-rectangle -->
+                <ins class="adsbygoogle"
+                     style="display:inline-block;width:300px;height:250px"
+                     data-ad-client="ca-pub-5421936135764052"
+                     data-ad-slot="1834530126"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            document.getElementById('searchInput').onkeydown = function (e) {
+                if (e.keyCode == 13) {
+                    document.getElementById('logoutSearch').submit()
+                }
+            };
+        });
+    </script>
+}

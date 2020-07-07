@@ -1,0 +1,49 @@
+﻿@model GamersAddict.Models.NewsletterRegistration
+@{
+    ViewBag.Title = "Préférence Newsletter";
+}
+
+<div class="page-content-header pure-g">
+    <div class="pure-u-1-2">
+        <h1 class="page-content-title">@ViewBag.Title</h1>
+    </div>
+
+    <div class="pure-u-1-2" style="margin-top: 2em; text-align: right;">
+        <div class="pure-menu pure-menu-horizontal">
+            <ul class="pure-menu-list">
+                <li class="pure-menu-item">@Html.ActionLink("Retour sur mon profil", "Index", "Manage", null, new { @class = "pure-button pure-button-primary" })</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="page-content-body">
+    <h4>Formulaire de préférence pour la newsletter</h4>
+    <hr />
+    @if (ViewBag.register == "true")
+    {
+        <a href="@("/Home/NewsletterUnsubscribe?email="+ HttpUtility.UrlEncode(ViewBag.email)+"&guid="+ HttpUtility.UrlEncode(ViewBag.secretKey))"
+           class="button-warning pure-button">Se désinscrire: @ViewBag.email</a>
+    }
+    else
+    {
+        <h3>Inscrivez-vous !</h3>
+        <div class="col-md-6 pure-form">
+            @using (Ajax.BeginForm("NewsletterSubscribe", "Home", new AjaxOptions()
+            {
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "result"
+            }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", style = "margin-top: 16px; margin-bottom: 6px;", placeholder = "Adresse Email" })
+                <div style="width: 100%;">
+                    <button type="submit" class="pure-button pure-button-primary">Je m'inscris</button>
+                </div>
+            }
+            <div id="result" style="color: lightgreen;"></div>
+        </div>
+    }
+</div>

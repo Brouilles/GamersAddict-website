@@ -1,0 +1,62 @@
+﻿@{ 
+    string[,] games = new string[,]
+    {
+        { "https://images-na.ssl-images-amazon.com/images/I/71tsg1iNHIL._SX522_.jpg",
+            "Horizon : Zero Dawn",
+            "De Sony",
+            "http://amzn.to/2k9tR8g"
+        },
+        { "https://images-na.ssl-images-amazon.com/images/I/71DRZLKBjiL._SX522_.jpg",
+            "Nioh",
+            "De Sony Computer",
+            "http://amzn.to/2jQLqZx"
+        },
+        { "http://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B01HHEMT1O&Format=_SL250_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1&tag=gameaddi04-21",
+            "Resident Evil 7 : Biohazard",
+            "De Capcom ",
+            "https://www.amazon.fr/gp/product/B01HHEMT1O/ref=as_li_tl?ie=UTF8&camp=1642&creative=6746&creativeASIN=B01HHEMT1O&linkCode=as2&tag=gameaddi04-21"
+        },
+        { "https://images-na.ssl-images-amazon.com/images/I/71frHVnc4hL._SX522_.jpg",
+            "Dead Rising 4 ",
+            "De Microsoft",
+            "http://amzn.to/2hz4USs"
+        },
+        { "https://images-na.ssl-images-amazon.com/images/I/71OcpFJp2sL._SX522_.jpg",
+            "Final Fantasy XV",
+            "De Square Enix",
+            "http://amzn.to/2hnXGmV"
+        },
+        { "http://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B013P1Z9WY&Format=_SL250_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1&tag=gameaddi04-21",
+            "Mafia III",
+            "De 2K Games",
+            "http://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B01DZ0SG7K&Format=_SL250_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1&tag=gameaddi04-21"
+        },
+        { "http://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B01FDHC2L4&Format=_SL250_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1&tag=gameaddi04-21",
+            "Battlefield 1",
+            "De Electronic Arts",
+            "https://www.amazon.fr/gp/product/B01FDHC2L4/ref=as_li_tl?ie=UTF8&camp=1642&creative=6746&creativeASIN=B01FDHC2L4&linkCode=as2&tag=gameaddi04-21"
+        },
+        { "http://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B01H0PJN7I&Format=_SL250_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1&tag=gameaddi04-21",
+            "Forza Horizon 3",
+            "De Microsoft",
+            "https://www.amazon.fr/gp/product/B01H0PJN7I/ref=as_li_tl?ie=UTF8&camp=1642&creative=6746&creativeASIN=B01H0PJN7I&linkCode=as2&tag=gameaddi04-21"
+        },
+    };
+}
+
+@for (int i = 0; i < games.GetLength(0); i++)
+{
+    <div class="thumbnail pure-u-1 pure-u-md-6-24">
+        <div class="thumbnail-img">
+            <img src="@games[i,0]" alt="Console Nintendo Switch">
+        </div>
+        <div class="thumbnail-content">
+            <h2>@games[i, 1]</h2>
+            <span>@games[i, 2]</span>
+
+        </div>
+        <div class="thumbnail-btn">
+            <a href="@games[i,3]" target="_blank" class="pure-button pure-button-primary">En savoir plus</a>
+        </div>
+    </div>
+}

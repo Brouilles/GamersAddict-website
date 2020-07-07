@@ -1,0 +1,49 @@
+﻿@using GamersAddict.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Connexion";
+}
+
+<div class="centered-box" style="width: 460px;">
+    <h2>Se connecter sur Gamers Addict</h2>
+    <hr />
+
+        <section id="loginForm">
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "pure-form", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <h4>connectez-vous avec votre compte :</h4>
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(m => m.UserName)
+                    @Html.TextBoxFor(m => m.UserName, new { style = "width: 100%;" })
+                    @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                </div>
+                <div style="margin-top: 10px;">
+                    @Html.LabelFor(m => m.Password)
+                    @Html.PasswordFor(m => m.Password, new { style = "width: 100%;" })
+                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                </div>
+                <div style="margin-top: 6px;">
+                    <div class="checkbox">
+                        @Html.CheckBoxFor(m => m.RememberMe)
+                        @Html.LabelFor(m => m.RememberMe)
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <input type="submit" value="Connexion" class="pure-button pure-button-primary" />
+                </div>
+                <p>
+                    Pas encore membre ? @Html.ActionLink("Cliquez-ici", "Register") pour vous inscrire 
+                </p>        
+            }
+        </section>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<style>
+    body { background: #eee; }
+</style>

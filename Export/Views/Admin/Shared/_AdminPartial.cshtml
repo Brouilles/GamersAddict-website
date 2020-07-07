@@ -1,0 +1,19 @@
+﻿<div class="page-content-header pure-g">
+    <div class="pure-u-1-2">
+        <h1 class="page-content-title">Administration</h1>
+    </div>
+
+    <div class="pure-u-1-2" style="margin-top: 2em; text-align: right;">
+        <div class="pure-menu pure-menu-horizontal">
+            <ul class="pure-menu-list">
+                <li class="pure-menu-item">@Html.ActionLink("Accueil", "Index", "Admin", null, new { @class = "pure-menu-link" })</li>
+                <li class="pure-menu-item">@Html.ActionLink("Rédaction", "Redaction", "Admin", null, new { @class = "pure-menu-link" })</li>
+                @if (User.IsInRole("administrator"))
+                {
+                    <li class="pure-menu-item">@Html.ActionLink("Membres", "Members", "Admin", null, new { @class = "pure-menu-link" })</li>
+                    <li class="pure-menu-item">@Html.ActionLink("SEO", "SEO", "Admin", null, new { @class = "pure-menu-link" })</li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

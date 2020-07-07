@@ -1,0 +1,109 @@
+﻿@using GamersAddict.Models
+@model GamersAddict.Models.Articles
+@{
+    ViewBag.Title = "Article";
+}
+<script src="~/ckeditor/ckeditor.js"></script>
+
+@Html.Partial("Shared/_AdminPartial")
+<div class="page-content-body pure-g">
+    <div class="pure-u-md-24-24">
+        <div class="pure-g">
+            <h2 class="pure-u-md-12-24">
+            @{ 
+                if(ViewBag.Edition == true)
+                { <text>Édition d'un article</text> }
+                else
+                { <text>Rédaction d'un article</text> }
+            }
+            </h2>
+        </div>
+        <hr />
+
+        @using (Html.BeginForm("Post", "Admin", null, FormMethod.Post, new { @class = "pure-form pure-form-stacked", role = "form", enctype = "multipart/form-data"}))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            if (ViewBag.Edition == true)
+            {
+                @Html.HiddenFor(m => m.Id)
+                @Html.HiddenFor(m => m.AuthorId)
+                @Html.HiddenFor(m => m.Date)
+                @Html.HiddenFor(m => m.Views)
+            }
+
+            <fieldset>
+                <div class="pure-control-group">
+                    @Html.LabelFor(m => m.Title)
+                    @Html.TextBoxFor(m => m.Title, new { @class = "pure-input-1" })
+                </div>
+
+                <div class="pure-control-group">
+                    @Html.DropDownListFor(model => model.PublishState, new SelectList(ViewBag.State, "Value", "Text"))
+                </div>
+
+                <div class="pure-control-group">
+                    <label for="file">Image d'en-tête: (Minimum 1280*720px)</label>
+                    <input type="file" name="file" id="file" />
+                </div>
+
+                <div class="pure-control-group">
+                    <div>
+                        <div style="float: left;">@Html.LabelFor(m => m.Description)</div>
+                        <div id="descriptionWordCounter">0</div>
+                    </div>
+                    @Html.TextAreaFor(m => m.Description, new { @class = "pure-input-1", style = " height: 100px;" })
+                </div>
+
+                <div class="pure-control-group">
+                    @Html.LabelFor(m => m.Text)
+                    @Html.TextAreaFor(m => m.Text, new { id = "TextArea" })
+                </div>
+
+                <div class="pure-control-group">
+                    @Html.LabelFor(m => m.Tags)
+                    @Html.TextBoxFor(m => m.Tags, new { @class = "pure-input-1" })
+                </div>
+
+                <div class="pure-controls">
+                    <button type="submit" class="pure-button pure-button-primary">Soumettre</button>
+                </div>
+            </fieldset>
+        }
+    </div>
+</div>
+
+<script>
+    $(function () {
+        CKEDITOR.replace('TextArea',
+        {
+            height: '500px',
+            filebrowserImageUploadUrl: '/ckeditor/Upload.ashx'
+        });
+    });
+
+    // Counter 
+    function wordCount(val) {
+        var wom = val.match(/\S+/g);
+        return {
+            charactersNoSpaces: val.replace(/\s+/g, '').length,
+            characters: val.length
+        };
+    }
+
+    var textarea = document.getElementById("Description");
+    var result = document.getElementById("descriptionWordCounter");
+
+    textarea.addEventListener("input", function () {
+        var v = wordCount(this.value);
+
+        if (v.characters > 100 && v.characters <= 150)
+            $("#descriptionWordCounter").css("color", "green");
+        else
+            $("#descriptionWordCounter").css("color", "red");
+
+        result.innerHTML = (v.characters);
+    }, false);
+
+</script>

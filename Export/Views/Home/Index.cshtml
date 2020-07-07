@@ -1,0 +1,101 @@
+﻿@using GamersAddict.Models
+@{
+    ViewBag.Title = "GAMERSADDICT.FR - Site tournant autour du jeu vidéo ainsi que série et film.";
+
+    //Load Articles
+    List<ArticlesViewModel> HeaderArticles;
+    using (var context = new SiteDbContext())
+    {
+        HeaderArticles = context.Articles
+            .OrderByDescending(r => r.Date)
+            .Where(r => r.PublishState == 2)
+            .Take(3)
+            .Select(r => new ArticlesViewModel
+            {
+                Id = r.Id,
+                Title = r.Title
+            }).ToList();
+    }
+}
+
+<div id="HomeIndex">
+    <section id="headerList">
+        <div class="content pure-g" style="width: 100%;">
+            @foreach (var item in HeaderArticles)
+            {
+                <a class="pure-u-1 pure-u-md-8-24 gallery-box" href="~/Article/detail/@HttpUtility.UrlEncode(item.Title)">
+                    <img src="@Url.Content("~/Images/Uploads/Articles/Header/" +item.Id + "x1280.jpeg")" alt="@item.Title" class="pure-img">
+                    <div class="subheader"><h2>@item.Title</h2></div>
+                </a>
+            }
+        </div>
+
+        <div id="videoHeader" class="content pure-g" style="width: 100%; display: none;"></div>
+        <div id="loadingVideo" class="content pure-g" style="width: 100%;"><div class="uil-triangle-css" style="margin: auto;"><div><div></div></div><div><div></div></div><div><div></div></div></div></div>
+    </section>
+</div>
+
+<div class="content" style="text-align: center;">
+    <h2 style="font-weight:normal;">Bienvenue sur Gamers Addict !</h2>
+    <div>
+        <p>Merci de nous aider à améliorer l'expérience Gamers Addict, vous retrouverez dans cette version du site en Bêta des fonctionnalités de base comme les vidéos, articles, alerte par email.</p>
+        <p>N'hésitez pas à faire des retours, donné vos idées et nous informer des bugs via le @Html.ActionLink("formulaire", "Contact", "Home").</p>
+    </div>
+
+    <div style="max-width: 200px; margin: auto;">
+        <a target="_blank" href='https://play.google.com/store/apps/details?id=com.dezeiraud.gamersaddict&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Disponible sur Google Play' src='https://play.google.com/intl/fr/badges/images/generic/fr_badge_web_generic.png' /></a>
+    </div>
+
+    @Html.ActionLink("Nouveautés & Articles", "Index", "Article", null, new { @class = "pure-button" })
+    @Html.ActionLink("Vidéos & rediff", "Video", "Home", null, new { @class = "pure-button" })
+    <a class="pure-button" href="https://www.youtube.com/channel/UCj7Tqdo8ZrPMH-4yQw5dsig">Youtube</a>
+</div>
+
+@section Scripts {
+    <script>
+        //Load content
+        loadVideoList("#videoHeader", "PLT_nmWXp6QmO2sWhvdquMvI5Mq0wR9MPa", 3); //Default
+
+        function loadVideoList(div, in_playlistId, nb) {
+            $.get(
+                "https://www.googleapis.com/youtube/v3/channels", {
+                    part: 'contentDetails',
+                    forUsername: 'BUROS1ST',
+                    key: 'AIzaSyCyU3nRBSFLxJyRCm2fpK80DLl_j_esF7g'
+                },
+                function (data) {
+                    $.each(data.items, function (i, item) {
+                        var playlistId = in_playlistId
+                        getVideos(div, in_playlistId, nb);
+                    })
+                }
+            );
+        }
+
+        function getVideos(div, plid, nb) {
+            $.get(
+                "https://www.googleapis.com/youtube/v3/playlistItems", {
+                    part: 'snippet',
+                    maxResults: nb,
+                    playlistId: plid,
+                    key: 'AIzaSyCyU3nRBSFLxJyRCm2fpK80DLl_j_esF7g'
+                },
+
+                function (data) {
+                    var output, videoNb = 0;
+
+                    $.each(data.items, function (i, item) {
+                        videoNb++;
+
+                        output = '<a class="pure-u-1 pure-u-md-8-24 gallery-box" href="/Video/Player/' + item.snippet.resourceId.videoId + '"><img src="https://i.ytimg.com/vi/' + item.snippet.resourceId.videoId + '/maxresdefault.jpg" alt="' + item.snippet.title + '" class="pure-img"><div class="subheader"><h2>' + item.snippet.title + '</h2></div></a>';
+                        $(div).append(output);
+                    })
+
+                    $('#loadingVideo').hide();
+                    $('#videoHeader').show();
+                }
+            );
+        }
+    </script>
+}
+<link rel="stylesheet" href="~/Content/loadingZelda.min.css">

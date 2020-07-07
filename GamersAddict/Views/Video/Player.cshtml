@@ -1,0 +1,60 @@
+﻿@{
+    ViewBag.Title = "Lecteur vidéo";
+}
+
+<div class="page-content-header pure-g">
+    <div class="pure-u-1">
+        <h1 class="JsTitle page-content-title">@ViewBag.Title</h1>
+    </div>
+</div>
+
+<div class="page-content-body pure-g">
+    <div class="pure-u-1 pure-u-xl-16-24">
+        <div class="videoWrapper">
+            <iframe width="560" height="349" src="@("https://www.youtube.com/embed/" + ViewBag.Id)" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <div class="pure-u-1 pure-u-xl-6-24 content" style="padding: 0;">
+        <h3>Description: </h3>
+        <p id="JsDescription"></p>
+        <a href="@("https://www.youtube.com/watch?v=" + ViewBag.Id)" style="width: 100%;" class="pure-button pure-button-error"><i class="fa fa-play"></i> Voir sur Youtube</a>
+        <div style="text-align: center; margin-top: 16px; width: 100%;">
+            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- GamersAddict-rectangle -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:300px;height:250px"
+                 data-ad-client="ca-pub-5421936135764052"
+                 data-ad-slot="1834530126"></ins>
+            <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    </div>
+</div>
+
+<div class="page-content-body pure-g">
+
+</div>
+
+@section Scripts {
+    <script>
+        
+            $.get(
+                "https://www.googleapis.com/youtube/v3/videos", {
+                    part: 'snippet',
+                    id: '@ViewBag.Id',
+                    fields: 'items(snippet(title), snippet(description))',
+                    key: 'AIzaSyCyU3nRBSFLxJyRCm2fpK80DLl_j_esF7g'
+                },
+                function (data) {
+                    $('.JsTitle').text(data.items[0].snippet.title);
+                    $(function () {
+                        var re = /(https?:\/\/(([-\w\.]+)+(:\d+)?(\/([\w/_\.]*(\?\S+)?)?)?))/ig;
+                        $('#JsDescription').html(data.items[0].snippet.description.replace(re, '<a href="$1" title="">$1</a>'));
+                    });
+                }
+            );
+        
+    </script>
+}

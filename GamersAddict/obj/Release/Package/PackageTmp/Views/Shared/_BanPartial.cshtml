@@ -1,0 +1,21 @@
+﻿@using GamersAddict.Models
+@using Microsoft.AspNet.Identity;
+@using Microsoft.AspNet.Identity.Owin;
+@using Microsoft.Owin.Security;
+@{
+    //Ban
+    if (Request.IsAuthenticated)
+    {
+        using (var db = new SiteDbContext())
+        {
+            var userId = User.Identity.GetUserId();
+            bool ifAccountBan = db.AspNetUserBan
+                .Any(r => r.UserId.Equals(userId));
+
+            if (ifAccountBan)
+            {
+                HttpContext.Current.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            }
+        }
+    }
+}

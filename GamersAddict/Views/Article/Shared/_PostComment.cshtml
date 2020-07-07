@@ -1,0 +1,48 @@
+﻿@model GamersAddict.Models.Comments
+@if (Request.IsAuthenticated)
+{
+    using (Ajax.BeginForm("PostComment", "Article", new AjaxOptions()
+    {
+        OnSuccess = "AjaxSuccess",
+        OnFailure = "AjaxFailure"
+    }, new { @class = "pure-form" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        //Hide
+        @Html.HiddenFor(m => m.ArticleId)
+        @Html.HiddenFor(m => m.CommentId)
+
+        //Form
+        <div class="pure-control-group">
+            @Html.LabelFor(m => m.Text, new { id = "labelText" })
+            @Html.TextAreaFor(m => m.Text, new { @class = "pure-input-1", style = " height: 100px;" })
+        </div>
+
+        <div style="text-align: right; margin-top: 6px;">
+            <a id="stopCommentary" style="display: none;" href="#" class="pure-button">Annuler (répondre à un commentaire)</a>
+            <input type="submit" value="Ajouter un commentaire" class="pure-button pure-button-primary" />
+        </div>
+    }
+}
+else
+{
+    <text><aside style="margin-top: 6px;">
+            <p><i class="fa fa-exclamation-triangle"></i> Vous devez être connecté pour poster un commentaire.</p>
+    </aside></text>
+}
+
+<link rel="stylesheet" href="~/Content/x0popup/x0popup.min.css">
+<script src="~/Content/x0popup/x0popup.min.js"></script>
+
+<script>
+    $('#stopCommentary').click(function () {
+            $('#CommentId').val(0);
+            $('#labelText').text("Ajouter un commentaire :");
+            $('#stopCommentary').hide();
+        });
+
+        function AjaxSuccess() { x0p('Succès', 'Message envoyé !', 'ok', false); $('#Text').empty(); }
+        function AjaxFailure() { x0p('Erreur', 'Envoie non effectuée !', 'error', false); }
+</script>

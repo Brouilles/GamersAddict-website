@@ -1,0 +1,28 @@
+﻿@using GamersAddict.Models
+@{ 
+    List<string> tagsList = new List<string>();
+    using (var context = new SiteDbContext())
+    {
+        tagsList = context.Articles
+            .OrderByDescending(r => r.Date)
+            .Where(r => r.PublishState == 2)
+            .Take(4)
+            .Select(r => r.Tags).ToList();
+    }
+}
+
+<div id="TagsList">
+    <ul>
+        @{
+            foreach (string tagsLine in tagsList)
+            {
+                string[] tags = tagsLine.Split(',');
+                foreach (string tag in tags)
+                {
+                    <li>@Html.ActionLink(@tag, "Tag", "Article", new { id = HttpUtility.UrlEncode(tag) }, new { @class = "tag-button" })</li>
+                }
+            }
+        }
+    </ul>
+</div>
+

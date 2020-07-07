@@ -1,0 +1,216 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+
+    <link rel="icon" type="/Images/jpg" href="/Images/favicon.png">
+    <link rel="shortcut icon" href="/Images/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="/Images/touch-icon/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="57x57" href="/Images/touch-icon/apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/Images/touch-icon/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/Images/touch-icon/apple-touch-icon-76x76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/Images/touch-icon/apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/Images/touch-icon/apple-touch-icon-120x120.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/Images/touch-icon/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/Images/touch-icon/apple-touch-icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/Images/touch-icon/apple-touch-icon-180x180.png" />
+
+    @Html.Partial("_SEOPartial")
+
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
+    <link rel="stylesheet" href="~/Content/reveal/reveal.min.css">
+    @RenderSection("StyleSheet", required: false)
+
+    @if (ViewBag.Tags != null)
+    {
+        <meta name="news_keywords" content="@ViewBag.Tags">
+    }
+
+    <meta name="google-site-verification" content="G79aNhV3fe5UBUAf2chRyV6YOuY7vckF7tDZYHnDunU" />
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-5421936135764052",
+        enable_page_level_ads: true
+    });
+    </script>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+
+    @Html.Partial("_BanPartial")
+</head>
+<body>
+    <script type="application/ld+json">
+        {
+            "@@context" : "http://schema.org",
+            "@@type" : "WebSite",
+            "name" : "Gamers Addict",
+            "url" : "http://gamersaddict.fr/",
+            "potentialAction": {
+                "@@type": "SearchAction",
+                "target": "http://gamersaddict.fr/Article/Search?page={query}",
+                "query-input": "required"
+            }
+            "sameAs" : [
+                "https://www.youtube.com/user/BUROS1ST",
+                "https://www.facebook.com/burosdmo",
+                "https://twitter.com/Buros1st",
+                "https://www.instagram.com/gamersaddictfr/",
+            ]
+        }
+    </script> 
+    <div id="layout">
+
+        <!-- Menu -->
+        <a href="#menu" id="menuLink" class="menu-link">
+            <span></span>
+        </a>
+        <div id="menu">
+            <div class="nav-header">
+                <img src="~/Images/logo.png" alt="Gamers Addict" style="width: 200px;" />
+                <h1>Gamers Addict</h1>
+                @Html.ActionLink("Connexion", "Login", "Account", null, new { id = "loginLink", @class = "pure-button" })
+                @Html.ActionLink("Inscription", "Register", "Account", null, new { id = "registerLink", @class = "pure-button" })
+            </div>
+
+            <div class="pure-menu">
+                <ul class="pure-menu-list">
+                    <li class="pure-menu-item"><a href="@Url.Action("Index", "Home")" class="pure-menu-link"><i class="fa fa-home"></i> Accueil</a></li>
+                    <li class="pure-menu-item"><a href="@Url.Action("Index", "Article")" class="pure-menu-link"><i class="fa fa-newspaper-o"></i> Nouveautés & Articles</a></li>
+                    <li class="pure-menu-item"><a href="@Url.Action("Video", "Home")" class="pure-menu-link"><i class="fa fa-video-camera"></i> Vidéos & rediff</a></li>
+                    <li class="pure-menu-item"><a href="@Url.Action("Index", "Shop")" class="pure-menu-link"><i class="fa fa-shopping-bag"></i> Shop <span style="background-color: #1f8dd6;padding: 0.2em 0.4em;color: white; border-radius: 3px;">Nouveau</span></a></li>
+                    <li class="pure-menu-item"><a class="pure-menu-link" href="https://discord.gg/0WrRV9I4RrFZD16x" target="_blank"><i class="fa fa-comments"></i> Discord <span style="background-color: #1f8dd6;padding: 0.2em 0.4em;color: white; border-radius: 3px;">Nouveau</span></a></li>
+                    <li class="pure-menu-item"><a href="@Url.Action("Index", "Dons")" class="pure-menu-link"><i class="fa fa-heart"></i> Faire un don</a></li>
+                    <li class="pure-menu-item"><a href="@Url.Action("Contact", "Home")" class="pure-menu-link"><i class="fa fa-envelope"></i> Nous contacter</a></li>
+
+                    @Html.Partial("_LoginPartial")
+                </ul>
+                <!--<div style="width: 100%; text-align: center;">
+                    <h3 style="color: white;">Bon plan (temporaire)</h3>
+                    <iframe src="//rcm-eu.amazon-adsystem.com/e/cm?t=gameaddi04-21&o=8&p=22&l=ur1&category=blackfriday2016&banner=0E52Z9KSK4HM706DWY82&f=ifr" width="250" height="250" scrolling="no" border="0" marginwidth="0" style="border:none;max-width:800px;max-height:600px;" frameborder="0"></iframe>
+                </div>-->
+            </div>
+            <div class="nav-header">
+                @Html.Partial("_Live")
+            </div>
+
+            <div class="nav-bottom desktop-only">
+                <ul class="social-icons">
+                    <li><a href="https://www.youtube.com/user/BUROS1ST" class="social-icon"> <i class="fa fa-youtube"></i></a></li>
+                    <li><a href="https://www.facebook.com/burosdmo" class="social-icon"> <i class="fa fa-facebook"></i></a></li>
+                    <li><a href="https://twitter.com/Buros1st" class="social-icon"> <i class="fa fa-twitter"></i></a></li>
+                    <li><a href="https://www.instagram.com/gamersaddictfr/" class="social-icon"> <i class="fa fa-instagram"></i></a></li>
+                </ul>
+
+                <small>Réalisé par <a href="http://dezeiraud.com/" target="_blank">DEZEIRAUD Gaëtan</a></small>
+                <p>&copy; @DateTime.Now.Year - Gamers Addict</p>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div id="main">
+            <div class="page-content">
+                @RenderBody()
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div id="adBlockModal" class="reveal-modal desktop-only">
+            <h2>Adblock détecté ! Merci de lire ce message.</h2>
+            <p>Nous avons détecté que vous utilisez AdBlock Plus ou un autre logiciel de blocage d'annonces empêchant la page de se charger complètement.</p>
+            <p>Nous n'avons pas de bannière Flash, de pubs animées, de pubs audio ou de popup intrusive, nous ne souhaitons pas afficher ce genre de pubs ici.</p>
+            <p>Nous avons besoin de financements pour garder notre site en vie et ils proviennent presque exclusivement de la publicité.</p>
+
+            <p><strong>Merci d'ajouter <a href="http://gamersaddict.fr/">gamersaddict.fr</a> à votre liste d’exceptions dans Adblock ou de désactiver ce logiciel.</strong></p>
+
+            <a class="close-reveal-modal">&#215;</a>
+        </div>
+    </div>
+
+    @Scripts.Render("~/Scripts/jquery.cookie-1.4.1.min.js")
+    @Scripts.Render("~/Content/reveal/jquery.reveal.js")
+
+    <script>
+        (function (window, document) {
+
+            var layout = document.getElementById('layout'),
+                menu = document.getElementById('menu'),
+                menuLink = document.getElementById('menuLink');
+
+            function toggleClass(element, className) {
+                var classes = element.className.split(/\s+/),
+                    length = classes.length,
+                    i = 0;
+
+                for (; i < length; i++) {
+                    if (classes[i] === className) {
+                        classes.splice(i, 1);
+                        break;
+                    }
+                }
+                // The className is not found
+                if (length === classes.length) {
+                    classes.push(className);
+                }
+
+                element.className = classes.join(' ');
+            }
+
+            menuLink.onclick = function (e) {
+                var active = 'active';
+
+                e.preventDefault();
+                toggleClass(layout, active);
+                toggleClass(menu, active);
+                toggleClass(menuLink, active);
+            };
+        }(this, this.document));
+
+        //Analytics
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-82324156-4', 'auto');
+        ga('send', 'pageview');
+
+
+        //AdBlock
+        (function ($) {
+            var testAd = document.createElement('div');
+            testAd.innerHTML = '&nbsp;';
+            testAd.className = 'adsbox';
+            document.body.appendChild(testAd);
+
+            window.setTimeout(function () {
+                if (testAd.offsetHeight === 0) {
+                    if ($.cookie('@("adblock_alert")') === undefined) {
+                        $.cookie('@("adblock_alert")', '1', { expires: 7 });
+
+                        $('#adBlockModal').reveal({
+                            animation: 'fade',                   
+                            animationspeed: 300,                       
+                            closeonbackgroundclick: true,              
+                            dismissmodalclass: 'close-reveal-modal'    
+                        });
+                    }
+                }
+                testAd.remove();
+            }, 100);
+        })(jQuery);
+    </script>
+
+    
+
+    @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.min.js")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

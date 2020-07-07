@@ -1,0 +1,35 @@
+﻿@using GamersAddict.Models
+@{
+    List<ArticlesViewModel> model;
+    int id = ViewBag.Id;
+
+    using (var context = new SiteDbContext())
+    {
+        model = context.Articles
+            .OrderByDescending(r => r.Id)
+            .Skip(3)
+            .Where(r => r.PublishState == 2 && r.Id != id)
+            .Select(r => new ArticlesViewModel
+            {
+                Id = r.Id,
+                Title = r.Title,
+                Description = r.Description,
+                Date = r.Date,
+                Views = r.Views,
+                PublishState = r.PublishState
+            }).Take(2).ToList();
+    }
+}
+
+@if (model.Count > 0)
+{
+    <h2 class="pure-u-1 pure-u-md-24-24">Articles récents</h2>
+
+    foreach (var item in model)
+    {
+        <a style="padding: 4px; box-sizing: border-box;" class="pure-u-1 pure-u-md-12-24 gallery-box" href="~/Article/detail/@HttpUtility.UrlEncode(item.Title)">
+            <img src="@Url.Content("~/Images/Uploads/Articles/Header/" +item.Id + "x1280.jpeg")" alt="@item.Title" class="pure-img">
+            <div class="subheader" style="right: 4px; left: 4px;"><h3>@item.Title</h3></div>
+        </a>
+    }
+}

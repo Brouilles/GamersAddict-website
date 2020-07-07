@@ -1,0 +1,82 @@
+﻿@model GamersAddict.Models.IndexViewModel
+@{
+    ViewBag.Title = "Mon profil";
+}
+
+<div class="page-content-header pure-g">
+    <div class="pure-u-1-2">
+        <h1 class="page-content-title">@ViewBag.Title</h1>
+    </div>
+
+    <div class="pure-u-1-2" style="margin-top: 2em; text-align: right;">
+        <div class="pure-menu pure-menu-horizontal">
+            <ul class="pure-menu-list">
+                <li class="pure-menu-item"><a id="DeleteAccount" class="pure-button-error pure-button" href="#">Supprimer mon compte</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="page-content-body">
+    <p class="text-success">@ViewBag.StatusMessage</p>
+    <div>
+        <h4>Modifier vos paramètres de compte</h4>
+        <hr />
+        <div>
+            <h5>Mot de passe:</h5>
+            <div>
+                @if (Model.HasPassword)
+                {
+                    @Html.ActionLink("Changez votre mot de passe", "ChangePassword", null, new { @class = "pure-button" })
+                }
+                else
+                {
+                    @Html.ActionLink("Créer", "SetPassword", null, new { @class = "pure-button" })
+                }
+            </div>
+            <h5>Adresse Email:</h5>
+            <div>
+                @Html.ActionLink("Changez votre adresse email", "ChangeEmail", null, new { @class = "pure-button" })
+            </div>
+            <h5>Alerte de live YouTube:</h5>
+            <div>
+                @Html.ActionLink("Changez votre préférence", "ChangeYouTubeAlert", null, new { @class = "pure-button" })
+            </div>
+            <h5>Newsletter:</h5>
+            <div>
+                @Html.ActionLink("Changez votre préférence", "ChangeNewsletter", null, new { @class = "pure-button" })
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <link rel="stylesheet" href="~/Content/x0popup/x0popup.min.css">
+    <script src="~/Content/x0popup/x0popup.min.js"></script>
+
+    <script>
+        $("#DeleteAccount").click(function() { 
+            x0p({
+                title: 'Suppression de compte',
+                type: 'warning',
+                text: 'Une fois supprimer, vous ne pourrez pas le récupérer.',
+                animationType: 'fadeIn',
+                buttons: [
+                    {
+                        type: 'cancel',
+                        text: 'Annuler'
+                    },
+                    {
+                        type: 'warning',
+                        text: 'Supprimer mon compte' 
+                    }
+                ]
+            }).then(function (data) {
+                if (data.button == 'warning') {
+                    document.location.href = "/Manage/RemoveLogin";
+                }
+            });
+        });
+    </script>
+}

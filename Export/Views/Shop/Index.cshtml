@@ -1,0 +1,166 @@
+﻿@using GamersAddict.Models
+@{
+    ViewBag.Title = "Shop";
+}
+
+<div id="shopDiv">
+    @Html.Partial("Shared/_NavPartial")
+
+    <div>
+        <div id="blackBanner" class="pure-g" style="border-bottom-width: 0px;">
+            <div class="pure-u-md-8-24">
+                <div class="pure-g">
+                    <div class="logo pure-u-1 pure-u-md-4-24">
+                        <i class="fa fa-amazon" aria-hidden="true"></i>
+                    </div>
+                    <div class="text pure-u-1 pure-u-md-20-24">
+                        <h2>Partenaire Amazon et Instant Gaming</h2>
+                        <span>Les jeux sont gérés par Amazon pour les versions physiques !</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pure-u-md-8-24" style="box-sizing: border-box; border-left: 1px solid #595959; border-right: 1px solid #595959;">
+                <div class="pure-g">
+                    <div class="logo pure-u-1 pure-u-md-4-24">
+                        <i class="fa fa-heart" aria-hidden="true"></i>
+                    </div>
+                    <div class="text pure-u-1 pure-u-md-20-24">
+                        <h2>Soutenez le site internet</h2>
+                        <span>Sur chaque achat nous obtenons un pourcentage qui sera réinvesti pour la maintenance et le développement du site !</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pure-u-md-8-24">
+                <div class="pure-g">
+                    <div class="logo pure-u-1 pure-u-md-4-24">
+                        <i class="fa fa-truck" aria-hidden="true"></i>
+                    </div>
+                    <div class="text pure-u-1 pure-u-md-20-24">
+                        <h2>Livraison GRATUITE</h2>
+                        <span>À partir de 25€ pour Amazon, gratuit sur Instant Gaming.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="owl-slide" class="owl-carousel owl-theme">
+            <div class="item"><a href="#PCGame"><img src="~/Images/Shop/Slider/InstantGaming.png" alt="Instant-Gaming"></a></div>
+            <div class="item"><a href="http://amzn.to/2k9KjoX" target="_blank"><img src="~/Images/Shop/Slider/soldes.png" alt="Soldes -50%"></a></div>
+            <div class="item"><a href="http://amzn.to/2iQ7Ii3" target="_blank"><img src="~/Images/Shop/Slider/2017.png" alt="Nintendo Mario"></a></div>
+        </div>
+    </div>
+
+    <div id="shopDivContent" class="pure-g">
+        <h2 class="pure-u-1">LES INDISPENSABLES</h2>
+        <div class="thumbnail pure-u-1 pure-u-md-6-24">
+            <div class="thumbnail-img">
+                <img src="~/Images/Shop/Home/PS4Pro.jpg" alt="PS4 1 To Pro">
+            </div>
+            <div class="thumbnail-content">
+                <h2>Console PS4 1 To Pro</h2>
+                <span>De Sony</span>
+            </div>
+            <div class="thumbnail-btn">
+                <a href="http://amzn.to/2heTZQp" target="_blank" class="pure-button pure-button-primary">En savoir plus</a>
+            </div>
+        </div>
+        <div class="thumbnail pure-u-1 pure-u-md-6-24">
+            <div class="thumbnail-img">
+                <img src="~/Images/Shop/Home/XboxOneS.jpg" alt="Console Microsoft Xbox One S 500 Go Blanc">
+            </div>
+            <div class="thumbnail-content">
+                <h2>Console Xbox One S</h2>
+                <span>De Microsoft</span>
+            </div>
+            <div class="thumbnail-btn">
+                <a href="http://amzn.to/2heWQZy" target="_blank" class="pure-button pure-button-primary">En savoir plus</a>
+            </div>
+        </div>
+        <div class="thumbnail pure-u-1 pure-u-md-6-24">
+            <div class="thumbnail-img">
+                <img src="~/Images/Shop/Home/Switch.jpg" alt="Console Nintendo Switch">
+            </div>
+            <div class="thumbnail-content">
+                <h2>Console Nintendo Switch</h2>
+                <span>De Nintendo</span>
+
+            </div>
+            <div class="thumbnail-btn">
+                <a  href="http://amzn.to/2heVZI6" target="_blank" class="pure-button pure-button-primary">En savoir plus</a>
+            </div>
+        </div>
+        <div class="thumbnail pure-u-1 pure-u-md-6-24" style="text-align: center; padding: 6px;">
+            <div style="margin-top: 5%;">
+                <script charset="utf-8" type="text/javascript">
+                    amzn_assoc_ad_type = "responsive_search_widget";
+                    amzn_assoc_tracking_id = "gameaddi04-21";
+                    amzn_assoc_marketplace = "amazon";
+                    amzn_assoc_region = "FR";
+                    amzn_assoc_placement = "";
+                    amzn_assoc_search_type = "search_widget";
+                    amzn_assoc_width = "auto";
+                    amzn_assoc_height = "auto";
+                    amzn_assoc_default_search_category = "";
+                    amzn_assoc_default_search_key = "jeux vidéos";
+                    amzn_assoc_theme = "light";
+                    amzn_assoc_bg_color = "FFFFFF";
+                </script>
+                <script src="//z-eu.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&Operation=GetScript&ID=OneJS&WS=1&MarketPlace=FR"></script>
+            </div>
+        </div>
+        <div style="background:#f2f2f2; text-align:center; border-bottom: 1px solid #d8d8d8;" class="pure-u-md-24-24">
+            <a href="http://amzn.to/2heQQ39" target="_blank">
+                <img style="max-width: 100%;" alt="PSVR" src="~/Images/Shop/psvr.JPG" />
+            </a>
+        </div>
+
+        <!-- SECTION 2 -->
+        <h2 class="pure-u-1">LES JEUX DE GAMERS ADDICT</h2>
+        @Html.Partial("Shared/_BubuPartial")
+
+        <!-- SECTION 3 -->
+        <div class="pure-u-1 pure-g">
+            <div class="pure-u-1 pure-u-md-11-24" style="padding-left: 30px;">
+                <h2 id="PCGame">PC (INSTANT GAMING)</h2>
+            </div>
+
+            <div class="pure-u-1 pure-u-md-12-24" style="text-align: right; line-height: 64px;">
+                <form class="pure-form" action="https://www.instant-gaming.com/fr/rechercher/" method="get" id="IGSearch" style="padding-right: 16px; max-width: 560px; min-width: 409px; float: right;">
+                    <input type="text" id="searchInput" placeholder="Votre recherche sur Instant Gaming" name="q" class="pure-input-rounded" style="width: calc(100% - 120px);">
+                    <input type="hidden" name="igr" value="gamers-addict" />
+                    <button type="submit" class="pure-button">Recherche</button>
+                </form>
+            </div>
+        </div>
+
+        @Html.Partial("Shared/_InstantGamingPartial")
+        
+    </div>
+</div>
+
+@section StyleSheet {
+    <link rel="stylesheet" href="~/Content/owl-carousel/owl.carousel.css">
+    <link rel="stylesheet" href="~/Content/owl-carousel/owl.theme.css">
+}
+
+
+@section Scripts {
+    <script src="~/Content/owl-carousel/owl.carousel.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            document.getElementById('searchInput').onkeydown = function (e) {
+                if (e.keyCode == 13) {
+                    document.getElementById('IGSearch').submit()
+                }
+            };
+
+            $("#owl-slide").owlCarousel({
+                navigation: false, // Show next and prev buttons
+                slideSpeed: 300,
+                paginationSpeed: 400,
+                singleItem: true
+            });
+        });
+    </script>
+}

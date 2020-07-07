@@ -1,0 +1,26 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    <text>
+        <style>
+            #loginLink {  display: none; }
+            #registerLink { display: none; }
+        </style>
+    </text>
+
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+    @Html.AntiForgeryToken()
+
+        <li class="pure-menu-heading">Mon compte</li>
+        <li class="pure-menu-item"><a href="@Url.Action("Index", "Manage")" class = "pure-menu-link"><i class="fa fa-user"></i> Mon profil</a></li>
+        if (Request.IsAuthenticated) //Administration
+        {
+            if (User.IsInRole("administrator") || User.IsInRole("writer"))
+            {
+                <li class="pure-menu-item"><a href="@Url.Action("Index", "Admin")" class="pure-menu-link"><i class="fa fa-diamond"></i> Administration</a></li>
+            }
+        }
+        <li><a class="pure-menu-link" href="javascript:document.getElementById('logoutForm').submit()"><i class="fa fa-sign-out"></i> Déconnexion</a></li>
+    }
+}
